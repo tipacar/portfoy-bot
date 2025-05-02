@@ -1,13 +1,16 @@
 import sqlite3
+#sqlite3 editor eklentisi gerekli
+#config dosyasından database adlı değişkeni bu koda aktarıyor
 from config import DATABASE
 skills = [ (_,) for _ in (['Python', 'SQL', 'API', 'Discord'])]
 statuses = [ (_,) for _ in (['Prototip Oluşturma', 'Geliştirme Aşamasında', 'Tamamlandı, kullanıma hazır', 'Güncellendi', 'Tamamlandı, ancak bakımı yapılmadı'])]
 class DB_Manager:
     def __init__(self, database):
         self.database = database # veri tabanının adı
-        
+    #table oluşturma 
     def create_tables(self):
         con= sqlite3.connect(self.database)
+        cursor = con.cursor()
         with con:
             con.execute(""" CREATE TABLE IF NOT EXISTS projects(
                                         project_id INTEGER PRIMARY KEY,
@@ -28,7 +31,13 @@ class DB_Manager:
             con.execute("""CREATE TABLE IF NOT EXISTS status(
                                         status_id INTEGER PRIMARY KEY,
                                         status_name TEXT)""")
-            
+            #ben de bunun ne yaptığını bilmiyorum
+            table_name = 'projects'
+            new_column_name = 'enemy'
+            new_column_type = 'TEXT'
+            alter_query = f"ALTER TABLE {table_name} ADD COLUMN {new_column_name} {new_column_type}"
+            cursor.execute(alter_query)
+            #skills ve statuse bir şeyler ekliyor
             data=[
                 (0,"Python"),
                 (1,"Discord bot geliştirme"),
@@ -144,6 +153,10 @@ class DB_Manager:
         sql = """DELETE FROM skills 
                 WHERE skill_id = ? AND project_id = ? """
         self.__executemany(sql, [(skill_id, project_id)])
+
+
+
+#sadece logic dosyasını çalıştırma işlemi(test için)   
 if __name__ == '__main__':
     dbmanager = DB_Manager(DATABASE)
     #dbmanager.create_tables()
@@ -152,7 +165,7 @@ if __name__ == '__main__':
     #dbmanager.insert_project(data=data)
     #proje guncelleme
     #data=("description1","pokemon GO!","6636636363")
-    #dbmanager.update_projects("description",data=data)B
+    #dbmanager.update_projects("description",data=data)
 
     
 
