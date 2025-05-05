@@ -1,4 +1,7 @@
-#portfoy bot
+portfoy bot
+
+
+
 pip instal discord lazım
 sqlite3 editor eklentisi gerekli
 yazdığım yere botunun tokenini koymalısın
